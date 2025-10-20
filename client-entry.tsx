@@ -1,4 +1,4 @@
-import { withCopyButton } from './src/CodeWithCopyButton';
+import { HogehogeComponent } from "./src/HogehogeComponent";
 
 declare const growiFacade: any;
 
@@ -12,24 +12,24 @@ const activate = (): void => {
   const originalCustomViewOptions = optionsGenerators.customGenerateViewOptions;
 
   optionsGenerators.customGenerateViewOptions = (...args: any[]) => {
-    const options = originalCustomViewOptions ? originalCustomViewOptions(...args) : optionsGenerators.generateViewOptions(...args);
-    const Code = options.components.code;
+    const options = originalCustomViewOptions
+      ? originalCustomViewOptions(...args)
+      : optionsGenerators.generateViewOptions(...args);
 
     // replace
-    options.components.code = withCopyButton(Code);
+    options.components.hoge = HogehogeComponent();
 
     return options;
   };
 };
 
-const deactivate = (): void => {
-};
+const deactivate = (): void => {};
 
 // register activate
 if ((window as any).pluginActivators == null) {
   (window as any).pluginActivators = {};
 }
-(window as any).pluginActivators['growi-plugin-copy-code-to-clipboard'] = {
+(window as any).pluginActivators["growi-plugin-hogehoge"] = {
   activate,
   deactivate,
 };
