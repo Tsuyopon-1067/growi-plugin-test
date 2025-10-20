@@ -1,6 +1,14 @@
+import { ReactElement, TableHTMLAttributes } from "react";
 import { HogehogeComponent } from "./src/HogehogeComponent";
 
 declare const growiFacade: any;
+
+interface CustomTableProps extends TableHTMLAttributes<HTMLTableElement> {
+  className?: string;
+  children?: React.ReactNode;
+}
+
+type TableComponent = () => ReactElement;
 
 const activate = (): void => {
   if (growiFacade == null || growiFacade.markdownRenderer == null) {
@@ -11,13 +19,22 @@ const activate = (): void => {
 
   const originalCustomViewOptions = optionsGenerators.customGenerateViewOptions;
 
-  optionsGenerators.customGenerateViewOptions = (...args: any[]) => {
-    const options = originalCustomViewOptions
-      ? originalCustomViewOptions(...args)
-      : optionsGenerators.generateViewOptions(...args);
+  optionsGenerators.customGenerateViewOptions = (...args: any[]): any => {
+    const options = optionsGenerators.generateViewOptions(...args);
 
-    // replace
-    options.components.hoge = HogehogeComponent();
+    // 元のtableコンポーネントを保存
+    const OriginalTableComponent: TableComponent = options.components.table;
+
+    // 新しいtableコンポーネントで上書き
+    options.components.table = (props: CustomTableProps): ReactElement => {
+      // 特定のクラスがあるかチェック
+      if (props.className?.includes("my-custom-table")) {
+        return <HogehogeComponent {...props} />;
+      }
+
+      // それ以外は元のコンポーネントをそのまま使用
+      return <OriginalTableComponent {...props} />;
+    };
 
     return options;
   };
