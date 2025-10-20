@@ -30,10 +30,12 @@ const activate = (): void => {
     options.components.table = (props: CustomTableProps): ReactElement => {
       // 特定のクラスがあるかチェック
       if (props.className?.includes("my-custom-table")) {
+        console.log("mycoustom table!!!");
         return <HogehogeComponent {...props} />;
       }
 
       // それ以外は元のコンポーネントをそのまま使用
+      console.log("mycoustom table janaiyo");
       return <OriginalTableComponent {...props} />;
     };
 
