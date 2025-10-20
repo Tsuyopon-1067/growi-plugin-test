@@ -11,6 +11,7 @@ interface CustomTableProps extends TableHTMLAttributes<HTMLTableElement> {
 type TableComponent = (props: CustomTableProps) => ReactElement;
 
 const activate = (): void => {
+  console.log("Plugin activated!"); // ここが呼び出されているか確認
   if (growiFacade == null || growiFacade.markdownRenderer == null) {
     return;
   }
