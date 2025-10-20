@@ -8,7 +8,7 @@ interface CustomTableProps extends TableHTMLAttributes<HTMLTableElement> {
   children?: React.ReactNode;
 }
 
-type TableComponent = () => ReactElement;
+type TableComponent = (props: CustomTableProps) => ReactElement;
 
 const activate = (): void => {
   if (growiFacade == null || growiFacade.markdownRenderer == null) {
@@ -16,11 +16,12 @@ const activate = (): void => {
   }
 
   const { optionsGenerators } = growiFacade.markdownRenderer;
-
   const originalCustomViewOptions = optionsGenerators.customGenerateViewOptions;
 
   optionsGenerators.customGenerateViewOptions = (...args: any[]): any => {
-    const options = optionsGenerators.generateViewOptions(...args);
+    const options = originalCustomViewOptions
+      ? originalCustomViewOptions(...args)
+      : optionsGenerators.generateViewOptions(...args);
 
     // 元のtableコンポーネントを保存
     const OriginalTableComponent: TableComponent = options.components.table;
